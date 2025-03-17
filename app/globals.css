@@ -92,3 +92,37 @@ body {
     @apply bg-background text-foreground;
   }
 }
+
+@keyframes bounce-subtle {
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-2px);
+  }
+}
+
+.animate-bounce-subtle {
+  animation: bounce-subtle 2s infinite;
+}
+
+/* Bottom navigation active indicator */
+.bottom-nav-indicator {
+  position: absolute;
+  bottom: -2px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 5px;
+  height: 5px;
+  border-radius: 50%;
+  background-color: theme("colors.primary.DEFAULT");
+  transition: all 0.3s ease;
+}
+
+/* Add extra padding to account for bottom navigation on mobile */
+@media (max-width: 768px) {
+  body {
+    padding-bottom: 4rem;
+  }
+}
