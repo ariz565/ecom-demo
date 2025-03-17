@@ -77,7 +77,7 @@ export default function Hero() {
     return () => clearInterval(interval);
   }, [isClient]);
 
-  // Return a loading state or simplified version during server render
+  // Return a loading state or simplified version during server render pok
   if (!isClient) {
     return (
       <section className="relative h-screen w-full overflow-hidden pt-16">
