@@ -17,7 +17,8 @@ const slides = [
     image:
       "https://images.unsplash.com/photo-1550246140-5119ae4790b8?q=80&w=1920&h=1080&auto=format&fit=crop",
     position: "left",
-    color: "from-primary/80 to-primary/20",
+    // Updated color gradient for better visibility and premium look
+    color: "from-primary/60 via-primary/30 to-transparent",
     type: "regular",
   },
   {
@@ -28,7 +29,8 @@ const slides = [
     image:
       "https://images.unsplash.com/photo-1617137968427-85924c800a22?q=80&w=1920&h=1080&auto=format&fit=crop",
     position: "right",
-    color: "from-secondary/80 to-secondary/20",
+    // Refined color with tertiary color for elegant feel
+    color: "from-tertiary/50 via-tertiary/30 to-transparent",
     type: "regular",
   },
   {
@@ -39,7 +41,8 @@ const slides = [
     image:
       "https://images.unsplash.com/photo-1516257984-b1b4d707412e?q=80&w=1920&h=1080&auto=format&fit=crop",
     position: "center",
-    color: "from-tertiary/80 to-tertiary/20",
+    // Adjusted to use a more neutral, sophisticated palette
+    color: "from-black/60 via-black/40 to-transparent",
     type: "regular",
   },
   {
@@ -49,7 +52,8 @@ const slides = [
     cta: "Join Waitlist",
     image: "",
     position: "center",
-    color: "",
+    // Elegant background for animation slide
+    color: "from-accent/30 to-accent/5",
     type: "animation",
   },
 ];
@@ -119,7 +123,16 @@ export default function Hero() {
                 className="object-cover"
               />
               <div
-                className={cn("absolute inset-0 bg-gradient-to-r", slide.color)}
+                className={cn(
+                  "absolute inset-0 bg-gradient-to-r",
+                  slide.color,
+                  // Add a subtle overlay to improve text readability
+                  slide.position === "left"
+                    ? "bg-gradient-to-r"
+                    : slide.position === "right"
+                    ? "bg-gradient-to-l"
+                    : "bg-gradient-to-t"
+                )}
               />
               <div className="container relative h-full mx-auto px-4 flex items-center">
                 <div

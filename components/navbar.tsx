@@ -17,6 +17,8 @@ import {
   Zap,
   Sparkles,
   TrendingUp,
+  LogOut,
+  Settings,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
@@ -25,6 +27,14 @@ import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
 import { usePathname } from "next/navigation";
 import { Badge } from "@/components/ui/badge";
 import { motion, AnimatePresence } from "framer-motion";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuLabel,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
 
 // Add type for search results
 type ProductType = {
@@ -51,6 +61,8 @@ export default function Navbar() {
   const searchInputRef = useRef<HTMLInputElement>(null);
   const pathname = usePathname();
   const [username, setUsername] = useState("Guest");
+  const [cartCount, setCartCount] = useState(3);
+  const [wishlistCount, setWishlistCount] = useState(2);
 
   // Add search results state
   const [searchResults, setSearchResults] = useState<ProductType[]>([]);
@@ -258,6 +270,13 @@ export default function Navbar() {
       currency: "INR",
       maximumFractionDigits: 0,
     }).format(price);
+  };
+
+  const openCart = () => {
+    // Here you would trigger your cart sidebar logic
+    console.log("Opening cart");
+    // If you have a cart context or provider, you can call the open method
+    // e.g., openSidebar("cart")
   };
 
   return (
@@ -577,20 +596,100 @@ export default function Navbar() {
                   <Search className="h-5 w-5" />
                   <span className="sr-only">Search</span>
                 </Button>
-                <Button variant="ghost" size="icon">
-                  <User className="h-5 w-5" />
-                  <span className="sr-only">Account</span>
+
+                {/* User dropdown */}
+                <DropdownMenu>
+                  <DropdownMenuTrigger asChild>
+                    <Button variant="ghost" size="icon">
+                      <User className="h-5 w-5" />
+                      <span className="sr-only">Account</span>
+                    </Button>
+                  </DropdownMenuTrigger>
+                  <DropdownMenuContent align="end" className="w-56">
+                    <DropdownMenuLabel>My Account</DropdownMenuLabel>
+                    <DropdownMenuSeparator />
+                    <DropdownMenuItem asChild>
+                      <Link
+                        href="/account/profile"
+                        className="flex items-center cursor-pointer"
+                      >
+                        <User className="mr-2 h-4 w-4" />
+                        <span>Profile</span>
+                      </Link>
+                    </DropdownMenuItem>
+                    <DropdownMenuItem asChild>
+                      <Link
+                        href="/account/orders"
+                        className="flex items-center cursor-pointer"
+                      >
+                        <Package className="mr-2 h-4 w-4" />
+                        <span>Orders</span>
+                      </Link>
+                    </DropdownMenuItem>
+                    <DropdownMenuItem asChild>
+                      <Link
+                        href="/wishlist"
+                        className="flex items-center cursor-pointer"
+                      >
+                        <Heart className="mr-2 h-4 w-4" />
+                        <span>Wishlist</span>
+                      </Link>
+                    </DropdownMenuItem>
+                    <DropdownMenuItem asChild>
+                      <Link
+                        href="/account/settings"
+                        className="flex items-center cursor-pointer"
+                      >
+                        <Settings className="mr-2 h-4 w-4" />
+                        <span>Settings</span>
+                      </Link>
+                    </DropdownMenuItem>
+                    <DropdownMenuSeparator />
+                    <DropdownMenuItem className="flex items-center cursor-pointer">
+                      <LogOut className="mr-2 h-4 w-4" />
+                      <span>Log out</span>
+                    </DropdownMenuItem>
+                  </DropdownMenuContent>
+                </DropdownMenu>
+
+                {/* Wishlist */}
+                <Button
+                  variant="ghost"
+                  size="icon"
+                  className="relative"
+                  asChild
+                >
+                  <Link href="/wishlist">
+                    <Heart className="h-5 w-5" />
+                    <span className="sr-only">Wishlist</span>
+                    {wishlistCount > 0 && (
+                      <Badge
+                        variant="secondary"
+                        className="absolute -top-1 -right-1 w-5 h-5 p-0 flex items-center justify-center text-[10px]"
+                      >
+                        {wishlistCount}
+                      </Badge>
+                    )}
+                  </Link>
                 </Button>
+
+                {/* Cart */}
                 <Button
                   variant="ghost"
                   size="icon"
                   className="relative animate-bounce-subtle"
+                  onClick={openCart}
                 >
                   <ShoppingCart className="h-5 w-5" />
                   <span className="sr-only">Cart</span>
-                  <span className="absolute top-0 right-0 h-4 w-4 rounded-full bg-primary text-[10px] font-medium text-primary-foreground flex items-center justify-center">
-                    3
-                  </span>
+                  {cartCount > 0 && (
+                    <Badge
+                      variant="secondary"
+                      className="absolute -top-1 -right-1 w-5 h-5 p-0 flex items-center justify-center text-[10px]"
+                    >
+                      {cartCount}
+                    </Badge>
+                  )}
                 </Button>
               </div>
 
@@ -600,11 +699,18 @@ export default function Navbar() {
                   variant="ghost"
                   size="icon"
                   className="relative animate-bounce-subtle"
+                  onClick={openCart}
                 >
                   <ShoppingCart className="h-5 w-5" />
-                  <span className="absolute top-0 right-0 h-4 w-4 rounded-full bg-primary text-[10px] font-medium text-primary-foreground flex items-center justify-center">
-                    3
-                  </span>
+                  <span className="sr-only">Cart</span>
+                  {cartCount > 0 && (
+                    <Badge
+                      variant="secondary"
+                      className="absolute -top-1 -right-1 w-5 h-5 p-0 flex items-center justify-center text-[10px]"
+                    >
+                      {cartCount}
+                    </Badge>
+                  )}
                 </Button>
 
                 {/* Mobile Menu Hamburger - moved to right */}
@@ -627,11 +733,7 @@ export default function Navbar() {
                           Hello, {username}!
                         </p>
                       </div>
-                      <SheetTrigger asChild>
-                        <Button variant="ghost" size="icon">
-                          <X className="h-5 w-5" />
-                        </Button>
-                      </SheetTrigger>
+                      {/* We removed the duplicate close button here */}
                     </div>
 
                     {/* Navigation items */}
@@ -967,6 +1069,14 @@ export default function Navbar() {
                 pathname === "/wishlist" && "fill-primary/10 stroke-primary"
               )}
             />
+            {wishlistCount > 0 && (
+              <Badge
+                variant="secondary"
+                className="absolute -top-1 right-2 w-4 h-4 p-0 flex items-center justify-center text-[9px]"
+              >
+                {wishlistCount}
+              </Badge>
+            )}
             <span className="text-xs mt-1">Wishlist</span>
           </Link>
 
